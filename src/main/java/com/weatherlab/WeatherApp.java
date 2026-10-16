@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.YearMonth;
 
-/// Command-line entry point for the weather analyzer.
+/// Launches the JavaFX dashboard or runs the command-line analyzer.
 public record WeatherApp() {
 
-    /// Runs the analyzer with optional CSV path, month, and temperature threshold.
+    /// Opens the dashboard by default or runs the CLI with optional arguments.
     ///
     /// ```sh
     /// java -cp target/classes com.weatherlab.WeatherApp --cli weatherdata.csv 2023-08 30
@@ -19,10 +19,16 @@ public record WeatherApp() {
             System.out.print("""
                     Weather Data Analyzer
                     Usage:
-                      java -cp target/classes com.weatherlab.WeatherApp [--cli [csv] [YYYY-MM] [threshold]]
+                      ./mvnw javafx:run
+                      java -cp target/classes com.weatherlab.WeatherApp --cli [csv] [YYYY-MM] [threshold]
                       java -cp target/classes com.weatherlab.WeatherApp --help
-                    Defaults: weatherdata.csv 2023-08 30
+                    CLI defaults: weatherdata.csv 2023-08 30
                     """);
+            return;
+        }
+
+        if (args.length == 0) {
+            WeatherDashboard.open(Path.of("weatherdata.csv"));
             return;
         }
 
